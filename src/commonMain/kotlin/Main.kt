@@ -6,10 +6,9 @@ import kotlin.time.measureTimedValue
 
 fun main() {
     Day1.run()
-    Day1.run()
 }
 
-sealed class AOC(val day: Int) {
+sealed class AOC(private val day: Int) {
     abstract fun part1(input: String): String
     abstract fun part2(input: String): String
 
