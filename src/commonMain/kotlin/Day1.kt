@@ -35,10 +35,9 @@ data object Day1 : AOC(1) {
         error("Unreachable: Puzzle input must be correct")
     }
 
-    override fun part1(input: String): String =
-        input.lineSequence()
-            .sumOf { it.first(Char::isDigit).digitToInt() * 10 + it.last(Char::isDigit).digitToInt() }
-            .toString()
+    override fun part1(input: String): String = input.lineSequence()
+        .sumOf { it.first(Char::isDigit).digitToInt() * 10 + it.last(Char::isDigit).digitToInt() }
+        .toString()
 
     override fun part2(input: String): String = input.lineSequence()
         .sumOf { firstDigit(it) * 10 + lastDigit(it) }
