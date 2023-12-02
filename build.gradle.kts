@@ -1,6 +1,5 @@
 plugins {
     kotlin("multiplatform") version "1.9.21"
-    application
 }
 
 group = "me.mark"
@@ -11,11 +10,7 @@ repositories {
 }
 
 kotlin {
-    jvm {
-        withJava()
-        jvmToolchain(8)
-    }
-    mingwX64 {
+    mingwX64("win") {
         binaries {
             executable {
                 entryPoint = "main"
@@ -31,12 +26,4 @@ kotlin {
             }
         }
     }
-}
-
-tasks.test {
-    useJUnitPlatform()
-}
-
-application {
-    mainClass.set("MainKt")
 }
