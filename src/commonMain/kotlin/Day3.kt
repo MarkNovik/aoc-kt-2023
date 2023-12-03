@@ -1,72 +1,61 @@
 data object Day3 : AOC(3) {
     override fun part1(input: String): String = input
         .lines().let(::Engine)
-        .partNumbers().distinct()
-        .sumOf { it.num.el }.toString()
+        .partNumbers()
+        .sumOf { it.el }.toString()
 
     override fun part2(input: String): String = input
         .lines().let(::Engine)
         .gears().values
         .filter { it.size == 2 }
-        .sumOf { (a, b) -> a * b }.toString()
+        .sumOf { (a, b) -> a.el * b.el }.toString()
 
-    class Engine(private val scheme: List<String>) {
-        fun partNumbers() = buildList {
-            scheme.forEachIndexed { y, line ->
-                line.forEachIndexed { x: Int, c: Char ->
-                    if (c != '.' && !c.isDigit()) {
-                        for (dx in (-1)..1)
-                            for (dy in (-1)..1) {
-                                if (dx != 0 || dy != 0) findNumber(Pointed(x, y, c), y + dy, x + dx)?.let(this::add)
-                            }
-                    }
-                }
+    private inline fun List<String>.forEachCharIndexed(block: (x: Int, y: Int, c: Char) -> Unit) =
+        forEachIndexed { y, line -> line.forEachIndexed { x, c -> block(x, y, c) } }
+
+    private inline fun forEachNeighbour(x: Int, y: Int, block: (dx: Int, dy: Int) -> Unit) =
+        ((-1)..1).forEach { dx -> ((-1)..1).forEach { dy -> if (dx != 0 || dy != 0) block(x + dx, y + dy) } }
+
+    private class Engine(private val scheme: List<String>) {
+        fun partNumbers() = buildSet {
+            scheme.forEachCharIndexed { x, y, c ->
+                if (c != '.' && !c.isDigit()) addAll(adjacentNumbers(x, y))
             }
         }
 
-        fun gears() = buildMap<_, MutableSet<Int>> {
-            scheme.forEachIndexed { y, line ->
-                line.forEachIndexed { x, c ->
-                    if (c == '*') {
-                        for (dx in (-1)..1) {
-                            for (dy in (-1)..1) {
-                                if (dx != 0 || dy != 0) {
-                                    findNumber(Pointed(x, y, c), y + dy, x + dx)?.let { (part, num) ->
-                                        getOrPut(part, ::mutableSetOf) += num.el
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+        fun gears() = buildMap {
+            scheme.forEachCharIndexed { x, y, c ->
+                if (c == '*') put(Pointed(x, y, c), adjacentNumbers(x, y))
             }
         }
-            .mapValues { it.value.toList() }
-            .filterValues { it.size == 2 }
 
+        private fun adjacentNumbers(
+            x: Int, y: Int
+        ): List<Pointed<Int>> = buildList(9) {
+            forEachNeighbour(x, y) { dx, dy -> findNumber(dx, dy)?.let(::add) }
+        }.distinct()
 
-        private tailrec fun findNumber(
-            part: Pointed<Char>,
-            y: Int,
-            fromX: Int,
-            toX: Int = fromX
-        ): PartNumber? {
-            if (scheme[y].slice(fromX..toX).any { !it.isDigit() }) return null
-            val left = scheme[y].getOrNull(fromX - 1)?.isDigit()
-            val right = scheme[y].getOrNull(toX + 1)?.isDigit()
-            return when {
-                left != true && right != true -> scheme[y].slice(fromX..toX).toIntOrNull()
-                    ?.let {
-                        PartNumber(part, Pointed(fromX, y, it))
-                    }
-
-                left == true -> findNumber(part, y, fromX - 1, toX)
-                right == true -> findNumber(part, y, fromX, toX + 1)
-                else -> findNumber(part, y, fromX - 1, toX + 1)
+        private fun findNumber(
+            x: Int, y: Int
+        ): Pointed<Int>? {
+            if (y !in scheme.indices) return null
+            if (x !in scheme[y].indices) return null
+            if (!scheme[y][x].isDigit()) return null
+            tailrec fun findNumberImpl(
+                at: Int, from: Int, to: Int
+            ): Pointed<Int> {
+                val left = scheme[at].getOrNull(from - 1)?.isDigit()
+                val right = scheme[at].getOrNull(to + 1)?.isDigit()
+                return when {
+                    left != true && right != true -> Pointed(from, at, scheme[at].slice(from..to).toInt())
+                    left == true -> findNumberImpl(at, from - 1, to)
+                    right == true -> findNumberImpl(at, from, to + 1)
+                    else -> findNumberImpl(at, from - 1, to + 1)
+                }
             }
+            return findNumberImpl(y, x, x)
         }
     }
 
     data class Pointed<T>(val x: Int, val y: Int, val el: T)
-    data class PartNumber(val part: Pointed<Char>, val num: Pointed<Int>)
 }
