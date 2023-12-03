@@ -5,9 +5,9 @@ data object Day2 : AOC(2) {
         input.lineSequence().map(Game::parse).filter { game ->
             game.bundles.all {
                 when(it) {
-                    is Blue -> it.amount <= 12
+                    is Red -> it.amount <= 12
                     is Green -> it.amount <= 13
-                    is Red -> it.amount <= 14
+                    is Blue -> it.amount <= 14
                 }
             }
         }.sumOf(Game::id).toString()
