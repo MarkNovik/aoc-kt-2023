@@ -18,8 +18,8 @@ data object Day4 : AOC(4) {
     private fun numbers(s: String) =
         s.trim().split(' ').filterNot(String::isBlank).map(String::toInt)
 
-    private fun matches(winningNumbers: Collection<Int>, cardNumbers: Collection<Int>) =
-        (winningNumbers intersect cardNumbers.toSet()).size
+    private fun matches(winningNumbers: List<Int>, cardNumbers: List<Int>) =
+        cardNumbers.count { it in winningNumbers  }
 
     private fun countFinalCards(cards: List<Int>): Int {
         val memory = IntArray(cards.size) { 1 }
