@@ -1,5 +1,6 @@
 plugins {
     kotlin("multiplatform") version "1.9.21"
+    application
 }
 
 group = "me.mark"
@@ -17,6 +18,9 @@ kotlin {
             }
         }
     }
+    jvm {
+        withJava()
+    }
     sourceSets {
         commonMain {
             dependencies {
@@ -25,4 +29,8 @@ kotlin {
             }
         }
     }
+}
+
+application {
+    mainClass.set("MainKt")
 }

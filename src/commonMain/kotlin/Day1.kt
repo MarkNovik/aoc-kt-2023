@@ -37,15 +37,15 @@ data object Day1 : AOC(1) {
         .toString()
 
     private enum class Position(
-        private inline val charSelector: (CharSequence) -> Char,
-        private inline val wordPredicate: (CharSequence, String) -> Boolean,
-        private inline val removeIndex: (CharSequence) -> Int
+        private val charSelector: (CharSequence) -> Char,
+        private val wordPredicate: (CharSequence, String) -> Boolean,
+        private val removeIndex: (CharSequence) -> Int
     ) {
         First(CharSequence::first, CharSequence::startsWith, { 0 }),
         Last(CharSequence::last, CharSequence::endsWith, CharSequence::lastIndex);
 
-        inline operator fun component1() = charSelector
-        inline operator fun component2() = wordPredicate
-        inline operator fun component3() = removeIndex
+        operator fun component1() = charSelector
+        operator fun component2() = wordPredicate
+        operator fun component3() = removeIndex
     }
 }

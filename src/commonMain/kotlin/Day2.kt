@@ -19,13 +19,11 @@ data object Day2 : AOC(2) {
             val blue = game.bundles.filterIsInstance<Blue>().maxOf(Cubes::amount)
             red * green * blue
         }.toString()
-    
 
-    private sealed interface Cubes {
-        val amount: Int
-        class Red(override val amount: Int): Cubes
-        class Green(override val amount: Int): Cubes
-        class Blue(override val amount: Int): Cubes
+    private sealed class Cubes(val amount: Int) {
+        class Red(amount: Int): Cubes(amount)
+        class Green(amount: Int): Cubes(amount)
+        class Blue(amount: Int): Cubes(amount)
         
         companion object {
             fun parse(line: String): Cubes {
