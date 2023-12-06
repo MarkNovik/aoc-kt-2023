@@ -1,10 +1,13 @@
 data object Day6 : AOC(6) {
-    override fun part1(input: String): String {
-        val races = races(input)
-        return races.map(Race::winMargin).fold(1, Int::times).toString()
-    }
+    override fun part1(input: String): String = input
+        .let(::races)
+        .map(Race::winMargin)
+        .fold(1, Long::times).toString()
 
-    override fun part2(input: String): String = race(input).winMargin().toString()
+    override fun part2(input: String): String = input
+        .let(::race)
+        .winMargin()
+        .toString()
 
     private fun races(input: String): List<Race> =
         input.lines().map {
@@ -13,12 +16,12 @@ data object Day6 : AOC(6) {
         }.let { it[0].zip(it[1], ::Race) }
 
     private fun race(input: String): Race = input.lines().map {
-        it.substringAfter(':').filter { it.isDigit() }.toLong()
+        it.substringAfter(':').filter(Char::isDigit).toLong()
     }.let { (t, d) -> Race(t, d) }
 
-    class Race(val time: Long, val distance: Long) {
-        fun winMargin(): Int =
-            marginOfError(time / 2L).count()//.run { endInclusive - start }
+    class Race(private val time: Long, private val distance: Long) {
+        fun winMargin(): Long =
+            marginOfError(time / 2L).run { endInclusive - start + 1 }
 
         private tailrec fun marginOfError(from: Long, to: Long = from): LongRange {
             val left = ((time - (from - 1)) * (from - 1)) > distance
