@@ -5,7 +5,13 @@ data object Day5 : AOC(5) {
         return seeds.minOf(almanac::locateSeed).toString()
     }
 
-    override fun part2(input: String): String = "TODO"
+    override fun part2(input: String): String {
+        val seeds = seeds(input)
+        val almanac = Almanac.parse(input)
+        return seeds.chunked(2) { (start, length) ->
+            (start..<(start + length)).minOf(almanac::locateSeed)
+        }.min().toString()
+    }
 
     private val order = listOf(
         "seed-to-soil",
