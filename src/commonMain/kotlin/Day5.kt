@@ -5,7 +5,9 @@ data object Day5 : AOC(5) {
         return seeds.minOf(almanac::locateSeed).toString()
     }
 
+    @Suppress("UNREACHABLE_CODE")
     override fun part2(input: String): String {
+        return "CURRENT SOLUTION IS TOO SLOW"
         val seeds = seeds(input)
         val almanac = Almanac.parse(input)
         return seeds.chunked(2) { (start, length) ->
@@ -25,11 +27,9 @@ data object Day5 : AOC(5) {
 
     private fun seeds(input: String): List<Long> = input
         .substringAfter("seeds: ")
+        .substringBefore('\r')
         .substringBefore('\n')
-        .split(" ").map(String::toLong)
-
-    //private fun seedRanges(input: String): List<SeedRange> = seeds(input).chunked(2) { SeedRange(it[0], it[1]) }
-    //class SeedRange(val start: Long, val length: Long)
+        .split(" ").filter(String::isNotBlank).map(String::toLong)
 
     class Range(private val source: Long, private val destination: Long, private val length: Long) {
         fun map(item: Long): Long? =
@@ -48,10 +48,12 @@ data object Day5 : AOC(5) {
 
         companion object {
             fun parse(input: String): Almanac = Almanac(order.map { section ->
-                AlmanacSection(input.substringAfter("$section map:\n")
+                AlmanacSection(input.substringAfter("$section map:")
+                    .substringBefore("\r\n\r\n")
+                    .substringBefore("\r\r")
                     .substringBefore("\n\n")
-                    .lines().map {
-                        val (dest, src, len) = it.split(" ").map(String::toLong)
+                    .lines().drop(1).map {
+                        val (dest, src, len) = it.split(" ").filter(String::isNotBlank).map(String::toLong)
                         Range(src, dest, len)
                     })
             })
