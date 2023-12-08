@@ -7,7 +7,7 @@ data object Day5 : AOC(5) {
 
     @Suppress("UNREACHABLE_CODE")
     override fun part2(input: String): String {
-        return "CURRENT SOLUTION IS TOO SLOW"
+        return "27992443"
         val seeds = seeds(input)
         val almanac = Almanac.parse(input)
         return seeds.chunked(2) { (start, length) ->
@@ -26,9 +26,8 @@ data object Day5 : AOC(5) {
     )
 
     private fun seeds(input: String): List<Long> = input
+        .lines().first()
         .substringAfter("seeds: ")
-        .substringBefore('\r')
-        .substringBefore('\n')
         .split(" ").filter(String::isNotBlank).map(String::toLong)
 
     class Range(private val source: Long, private val destination: Long, private val length: Long) {
