@@ -6,7 +6,7 @@ data object Day9 : AOC(9) {
     private fun solve(input: String, extrapolation: (List<Int>) -> Int): String = input
         .lines()
         .map { it.split(" ").map(String::toInt) }
-        .sumOf { extrapolation(it) }
+        .sumOf(extrapolation)
         .toString()
 
     private fun differentiate(nums: List<Int>) =
