@@ -8,7 +8,7 @@ data object Day7 : AOC(7) {
             acc + (index + 1) * play.bid
         }.toString()
 
-    fun parseInput(input: String, jIsJoker: Boolean) = input.lines().map { Play.parse(it, jIsJoker) }
+    private fun parseInput(input: String, jIsJoker: Boolean) = input.lines().map { Play.parse(it, jIsJoker) }
 
     data class Play(val hand: Hand, val bid: Long) {
         companion object {
@@ -18,7 +18,7 @@ data object Day7 : AOC(7) {
     }
 
     data class Hand(val cards: List<Suit>) : Comparable<Hand> {
-        val combo by lazy {
+        private val combo by lazy {
             val dist = cards.toSet().associateWith { cards.count(it::equals) }
             val vals = dist.values.sortedDescending()
             when (dist[Suit.JOKER]) {
