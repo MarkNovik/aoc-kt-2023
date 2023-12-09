@@ -13,9 +13,6 @@ data object Day8 : AOC(8) {
         }.indexOfFirst { it == "ZZZ" }.toString()
     }
 
-    tailrec fun gcd(a: Long, b: Long): Long = if (b == 0L) a else gcd(b, a % b)
-    fun lcm(a: Long, b: Long): Long = a * b / gcd(a, b)
-
     override fun part2(input: String): String {
         val (instructions, nodes) = parseInput(input)
         return nodes.keys.filter { it.endsWith('A') }.map { name ->
@@ -31,9 +28,12 @@ data object Day8 : AOC(8) {
         }.reduce(::lcm).toString()
     }
 
-    val nodeRegex = Regex("""(\w{3})\s=\s\((\w{3}),\s(\w{3})\)""")
+    private val nodeRegex = Regex("""(\w{3})\s=\s\((\w{3}),\s(\w{3})\)""")
 
-    fun parseInput(input: String): Pair<Instructions, Map<String, Node>> {
+    private tailrec fun gcd(a: Long, b: Long): Long = if (b == 0L) a else gcd(b, a % b)
+    private fun lcm(a: Long, b: Long): Long = a * b / gcd(a, b)
+
+    private fun parseInput(input: String): Pair<Instructions, Map<String, Node>> {
         val lines = input.lines().iterator()
         return Pair(lines.next().let(::Instructions), buildMap {
             lines.next()
