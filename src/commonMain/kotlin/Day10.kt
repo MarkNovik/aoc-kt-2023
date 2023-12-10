@@ -17,10 +17,8 @@ data object Day10 : AOC(10) {
             val idx = map[x].indices.filter { y ->
                 val i1 = loop.indexOf(x to y)
                 val i2 = loop.indexOf(x + 1 to y)
-                i1 != -1 && i2 != -1 && (abs(i1 - i2) == 1 || i1 in listOf(0, loop.lastIndex) && i2 in listOf(
-                    0,
-                    loop.lastIndex
-                ))
+                i1 != -1 && i2 != -1 && (abs(i1 - i2) == 1 ||
+                        i1 in listOf(0, loop.lastIndex) && i2 in listOf(0, loop.lastIndex))
             }
             (idx.indices step 2).sumOf { i ->
                 (idx[i]..idx[i + 1]).count { y -> x to y !in loop }
@@ -71,7 +69,8 @@ data object Day10 : AOC(10) {
             }
         }
     }
-)
+    )
+
     enum class Side {
         NORTH, EAST, SOUTH, WEST
     }
