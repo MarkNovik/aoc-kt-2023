@@ -17,6 +17,7 @@ fun main() {
     Day10.run()
     Day11.run()
     Day12.run()
+    Day13.run()
 }
 
 sealed class AOC(private val day: Int) {
