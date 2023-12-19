@@ -1,23 +1,10 @@
-import kotlinx.io.buffered
-import kotlinx.io.files.Path
-import kotlinx.io.files.SystemFileSystem
-import kotlinx.io.readString
+import java.io.File
+import kotlin.reflect.KClass
 import kotlin.time.measureTimedValue
 
 fun main() {
-    Day1.run()
-    Day2.run()
-    Day3.run()
-    Day4.run()
-    Day5.run()
-    Day6.run()
-    Day7.run()
-    Day8.run()
-    Day9.run()
-    Day10.run()
-    Day11.run()
     Day12.run()
-    Day13.run()
+    //AOC::class.sealedSubclasses.mapNotNull(KClass<out AOC>::objectInstance).forEach(AOC::run)
 }
 
 sealed class AOC(private val day: Int) {
@@ -26,7 +13,7 @@ sealed class AOC(private val day: Int) {
 
     fun run() {
         print("Day $day: ")
-        runCatching { SystemFileSystem.source(Path("input/day$day.txt")).buffered().readString() }.fold(
+        runCatching { File("input/day$day.txt").readText() }.fold(
             onSuccess = { input ->
                 print("\n\tPart1: ")
                 val (res1, time1) = measureTimedValue { part1(input) }

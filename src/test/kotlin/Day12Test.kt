@@ -15,6 +15,11 @@ class Day12Test {
     }
 
     @Test
+    fun part2() {
+        assertEquals("525152", Day12.part2(input))
+    }
+
+    @Test
     fun groupApply1() {
         val cr = Day12.ConditionRecord("???.###")
         assertEquals(listOf(0, 1, 2), cr.apply(1))

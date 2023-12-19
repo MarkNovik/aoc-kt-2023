@@ -1,5 +1,5 @@
 plugins {
-    kotlin("multiplatform") version "1.9.21"
+    kotlin("jvm") version "1.9.21"
     application
 }
 
@@ -10,25 +10,9 @@ repositories {
     mavenCentral()
 }
 
-kotlin {
-    mingwX64("win") {
-        binaries {
-            executable {
-                entryPoint = "main"
-            }
-        }
-    }
-    jvm {
-        withJava()
-    }
-    sourceSets {
-        commonMain {
-            dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.3.0")
-                implementation(kotlin("test"))
-            }
-        }
-    }
+dependencies {
+    testImplementation(kotlin("test"))
+    implementation(kotlin("reflect"))
 }
 
 application {
